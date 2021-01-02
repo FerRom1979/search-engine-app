@@ -1,11 +1,12 @@
 import React from 'react';
+import SearchPage from './components/searchPage/index';
 
 function App() {
-    return (
-        <div className="App">
-            <h1>hola desde react-redux</h1>
-        </div>
-    );
+  return (
+    <div className="App">
+      <SearchPage />
+    </div>
+  );
 }
 
 export default App;
