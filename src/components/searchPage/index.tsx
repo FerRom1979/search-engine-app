@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Iinput } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDataAction, getDataDuck } from '../../redux/actions';
+import { Search } from 'react-bootstrap-icons';
 
 const SearchPage = () => {
   const dispatch = useDispatch<any>();
@@ -27,24 +28,50 @@ const SearchPage = () => {
   console.log(nameSearch);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" name="search" ref={register} placeholder="Buscar en la web" />
-        <select className="form-control" name="seeker" placeholder="Seeker" ref={register}>
-          {options.map((item: any, index: number) => {
-            return <option key={index}>{item.name}</option>;
-          })}
-        </select>
-        <button type="submit">Buscar</button>
-      </form>
-      <div>
+    <div className="mt-4">
+      <div className="mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="d-flex justify-content-center mt-4">
+          <div className="my-4 mx-2">
+            <input
+              type="text"
+              name="search"
+              ref={register}
+              placeholder="Buscar en la web"
+              className="form-control "
+            />
+          </div>
+          <div className="my-4 mx-2">
+            <select className=" form-control" name="seeker" placeholder="Seeker" ref={register}>
+              {options.map((item: any, index: number) => {
+                return (
+                  <option className="form-control" key={index}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="my-4 mx-2">
+            <button type="submit" className="btn btn-primary mb-3">
+              <Search />
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="container">
         {(nameSearch === 'Google and DuckGo' || nameSearch === 'Google') &&
           dataSearch.getdata &&
           dataSearch.getdata.map((item: any, index: number) => {
             return (
-              <ul key={index}>
+              <ul key={index} className="list-unstyled">
                 <li>
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none"
+                  >
                     {item.title}
                   </a>
                   <p>{item.snippet}</p>
@@ -56,9 +83,14 @@ const SearchPage = () => {
           dataSearch.getInfo &&
           dataSearch.getInfo.map((item: any, index: number) => {
             return (
-              <ul key={index}>
-                <li>
-                  <a href={item.FirstURL} target="_blank" rel="noopener noreferrer">
+              <ul key={index} className="list-unstyled mx-auto">
+                <li className="mx-auto">
+                  <a
+                    href={item.FirstURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none"
+                  >
                     {item.Text}
                   </a>
                   <p>{item.snippet}</p>
