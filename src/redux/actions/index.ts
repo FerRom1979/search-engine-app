@@ -6,9 +6,8 @@ export const getDataAction = (info: string) => async (dispatch: any /* , getStat
     try {
       const res = await axios.get(
         // eslint-disable-next-line no-undef
-        `https://www.googleapis.com/customsearch/v1?key=${process.env.REACT_APP_API_URL}&cx=${process.env.REACT_APP_NOT_SECRET_CODE_CX}&q=${info}&hl=es-AR&lr=lang_es&newpage[2]`
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.REACT_APP_API_URL}&cx=${process.env.REACT_APP_NOT_SECRET_CODE_CX}&q=${info}`
       );
-
       dispatch({
         type: GET_DATA,
         payload: res.data.items,
@@ -25,7 +24,6 @@ export const getDataDuck = (info: string) => async (dispatch: any) => {
         type: GET_DATA_DUCK,
         payload: res.data.RelatedTopics,
       });
-      console.log(res.data.RelatedTopics);
     } catch (error) {
       console.log(error);
     }
