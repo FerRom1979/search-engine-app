@@ -1,33 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Iinput } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDataAction } from '../../redux/actions';
+import { getDataAction, getDataDuck } from '../../redux/actions';
 
 const SearchPage = () => {
-  const dispatch = useDispatch();
-  // eslint-disable-next-line no-undef
-  console.log(process.env.REACT_APP_NOT_SECRET_CODE_CX);
-
+  const dispatch = useDispatch<any>();
+  const [nameSearch, setNameSearch] = useState<string>('');
   const dataSearch: any = useSelector((store) => store);
   const { register, handleSubmit } = useForm<Iinput>();
+  const options = [{ name: 'Google' }, { name: 'DuckGo' }, { name: 'Google and DuckGo' }];
 
   const onSubmit = (data: any, e: any) => {
     e.target.reset();
-
-    dispatch(getDataAction(data.search));
+    setNameSearch(data.seeker);
+    if (data.seeker === 'Google') {
+      return dispatch(getDataAction(data.search));
+    }
+    if (data.seeker === 'DuckGo') {
+      return dispatch(getDataDuck(data.search));
+    }
+    if (data.seeker === 'Google and DuckGo') {
+      return dispatch(getDataAction(data.search)), dispatch(getDataDuck(data.search));
+    }
   };
-
-  /* console.log(datos.getdata[0].pagemap.cse_thumbnail[0].src); */
+  console.log(nameSearch);
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input type="text" name="search" ref={register} placeholder="Buscar en la web" />
+        <select className="form-control" name="seeker" placeholder="Seeker" ref={register}>
+          {options.map((item: any, index: number) => {
+            return <option key={index}>{item.name}</option>;
+          })}
+        </select>
         <button type="submit">Buscar</button>
       </form>
       <div>
-        {dataSearch.getdata &&
+        {(nameSearch === 'Google and DuckGo' || nameSearch === 'Google') &&
+          dataSearch.getdata &&
           dataSearch.getdata.map((item: any, index: number) => {
             return (
               <ul key={index}>
@@ -36,15 +48,24 @@ const SearchPage = () => {
                     {item.title}
                   </a>
                   <p>{item.snippet}</p>
-                  {/* {item.getdata.pagemap[0].cse_thumbnail[0].src && (
-                    <img src={item.getdata[0].pagemap.cse_thumbnail[0].src} alt="foto" />
-                  )} */}
                 </li>
               </ul>
             );
           })}
-        {/* <script async src="https://cse.google.com/cse.js?cx=ec47603a96be4e460"></script>
-        <div className="gcse-search"></div> */}
+        {(nameSearch === 'Google and DuckGo' || nameSearch === 'DuckGo') &&
+          dataSearch.getInfo &&
+          dataSearch.getInfo.map((item: any, index: number) => {
+            return (
+              <ul key={index}>
+                <li>
+                  <a href={item.FirstURL} target="_blank" rel="noopener noreferrer">
+                    {item.Text}
+                  </a>
+                  <p>{item.snippet}</p>
+                </li>
+              </ul>
+            );
+          })}
       </div>
     </div>
   );

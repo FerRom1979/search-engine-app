@@ -1,4 +1,4 @@
-import { GET_DATA } from '../actions/types';
+import { GET_DATA, GET_DATA_DUCK } from '../actions/types';
 import axios from 'axios';
 
 export const getDataAction = (info: string) => async (dispatch: any /* , getState: any */) => {
@@ -13,6 +13,19 @@ export const getDataAction = (info: string) => async (dispatch: any /* , getStat
         type: GET_DATA,
         payload: res.data.items,
       });
+    } catch (error) {
+      console.log(error);
+    }
+};
+export const getDataDuck = (info: string) => async (dispatch: any) => {
+  if (info !== '')
+    try {
+      const res = await axios.get(`http://api.duckduckgo.com/?q=${info}&format=json&k1=-1 `);
+      dispatch({
+        type: GET_DATA_DUCK,
+        payload: res.data.RelatedTopics,
+      });
+      console.log(res.data.RelatedTopics);
     } catch (error) {
       console.log(error);
     }
