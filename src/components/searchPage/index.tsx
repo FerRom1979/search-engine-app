@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Iinput } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDataAction, getDataDuck } from '../../redux/actions';
 import { Search } from 'react-bootstrap-icons';
+import { HandIndexThumb } from 'react-bootstrap-icons';
 
 const SearchPage = () => {
   const dispatch = useDispatch<any>();
-  const [nameSearch, setNameSearch] = useState<string>('');
+
   const dataSearch: any = useSelector((store) => store);
   const { register, handleSubmit } = useForm<Iinput>();
   const options = [{ name: 'Google' }, { name: 'DuckGo' }, { name: 'Google and DuckGo' }];
 
   const onSubmit = (data: any, e: any) => {
     e.target.reset();
-    setNameSearch(data.seeker);
-    if (data.seeker === 'Google') {
-      return dispatch(getDataAction(data.search));
-    }
-    if (data.seeker === 'DuckGo') {
-      return dispatch(getDataDuck(data.search));
-    }
-    if (data.seeker === 'Google and DuckGo') {
-      return dispatch(getDataAction(data.search)), dispatch(getDataDuck(data.search));
+
+    switch (data.seeker) {
+      case data.seeker === 'Google':
+        return dispatch(getDataAction(data.search));
+
+      case data.seeker === 'DuckGo':
+        return dispatch(getDataDuck(data.search));
+      default:
+        return dispatch(getDataAction(data.search)), dispatch(getDataDuck(data.search));
     }
   };
-  console.log(nameSearch);
 
   return (
-    <div className="mt-4">
-      <div className="mt-4">
+    <div>
+      <div>
         <form onSubmit={handleSubmit(onSubmit)} className="d-flex justify-content-center mt-4">
           <div className="my-4 mx-2">
             <input
@@ -58,20 +58,22 @@ const SearchPage = () => {
           </div>
         </form>
       </div>
-
       <div className="container">
-        {(nameSearch === 'Google and DuckGo' || nameSearch === 'Google') &&
-          dataSearch.getdata &&
+        {dataSearch.getdata.length !== 0 &&
           dataSearch.getdata.map((item: any, index: number) => {
             return (
               <ul key={index} className="list-unstyled">
                 <li>
+                  <HandIndexThumb />
                   <a
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
+                    <span>
+                      <HandIndexThumb className="text-danger" />
+                    </span>
                     {item.title}
                   </a>
                   <p>{item.snippet}</p>
@@ -79,8 +81,7 @@ const SearchPage = () => {
               </ul>
             );
           })}
-        {(nameSearch === 'Google and DuckGo' || nameSearch === 'DuckGo') &&
-          dataSearch.getInfo &&
+        {dataSearch.getInfo.length !== 0 &&
           dataSearch.getInfo.map((item: any, index: number) => {
             return (
               <ul key={index} className="list-unstyled mx-auto">
@@ -91,9 +92,11 @@ const SearchPage = () => {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
+                    <span className="px-1">
+                      <HandIndexThumb className="text-danger " />
+                    </span>
                     {item.Text}
                   </a>
-                  <p>{item.snippet}</p>
                 </li>
               </ul>
             );
